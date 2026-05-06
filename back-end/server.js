@@ -2,6 +2,13 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { z } from 'zod';
+
+const userSchema = z.object({
+  nome: z.string().min(1, 'Nome é obrigatório'),
+  idade: z.number().int().positive('Idade deve ser um número positivo'),
+  email: z.string().email('Email inválido')
+});
 
 dotenv.config();
 
@@ -13,12 +20,15 @@ const port = 3000;
 
 app.use(express.json());
 
-// CREATE
 app.post('/usuarios', async (req, res) => {
   try {
-    const { nome, idade, email } = req.body;
+    const result = userSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ message: 'Dados inválidos', errors: result.error.errors });
+    }
+
     const user = await prisma.user.create({
-      data: { nome, idade, email }
+      data: result.data
     });
     res.status(201).json(user);
   } catch (error) {
@@ -30,7 +40,6 @@ app.post('/usuarios', async (req, res) => {
 });
 
 
-// READ ALL
 app.get('/usuarios', async (req, res) => {
   try {
     const users = await prisma.user.findMany();
@@ -40,7 +49,6 @@ app.get('/usuarios', async (req, res) => {
   }
 });
 
-// READ ONE
 app.get('/usuarios/:id', async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
@@ -55,13 +63,16 @@ app.get('/usuarios/:id', async (req, res) => {
   }
 });
 
-// UPDATE
 app.put('/usuarios/:id', async (req, res) => {
   try {
-    const { nome, idade, email } = req.body;
+    const result = userSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ message: 'Dados inválidos', errors: result.error.errors });
+    }
+
     const user = await prisma.user.update({
       where: { id: Number(req.params.id) },
-      data: { nome, idade, email }
+      data: result.data
     });
     res.status(200).json(user);
   } catch (error) {
@@ -72,7 +83,6 @@ app.put('/usuarios/:id', async (req, res) => {
   }
 });
 
-// DELETE
 app.delete('/usuarios/:id', async (req, res) => {
   try {
     await prisma.user.delete({
