@@ -37,7 +37,6 @@ const router = Router();
  *       409:
  *         description: Email já cadastrado
  */
-router.post('/', createUser);
 
 /**
  * @swagger
@@ -49,7 +48,6 @@ router.post('/', createUser);
  *       200:
  *         description: Lista de usuários
  */
-router.get('/', getUsers);
 
 /**
  * @swagger
@@ -69,7 +67,6 @@ router.get('/', getUsers);
  *       404:
  *         description: Usuário não encontrado
  */
-router.get('/:id', getUser);
 
 /**
  * @swagger
@@ -104,7 +101,6 @@ router.get('/:id', getUser);
  *       404:
  *         description: Usuário não encontrado
  */
-router.put('/:id', updateUser);
 
 /**
  * @swagger
@@ -124,6 +120,11 @@ router.put('/:id', updateUser);
  *       404:
  *         description: Usuário não encontrado
  */
+
+router.post('/', createUser);
+router.get('/', getUsers);
+router.get('/:id', getUser);
+router.put('/:id', updateUser);
 router.delete('/:id', deleteUser);
 
 export default router;
