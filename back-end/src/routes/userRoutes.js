@@ -22,6 +22,10 @@ const router = Router();
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - nome
+ *               - idade
+ *               - email
  *             properties:
  *               nome:
  *                 type: string
@@ -37,6 +41,7 @@ const router = Router();
  *       409:
  *         description: Email já cadastrado
  */
+router.post('/', createUser);
 
 /**
  * @swagger
@@ -48,6 +53,7 @@ const router = Router();
  *       200:
  *         description: Lista de usuários
  */
+router.get('/', getUsers);
 
 /**
  * @swagger
@@ -67,6 +73,7 @@ const router = Router();
  *       404:
  *         description: Usuário não encontrado
  */
+router.get('/:id', getUser);
 
 /**
  * @swagger
@@ -86,6 +93,10 @@ const router = Router();
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - nome
+ *               - idade
+ *               - email
  *             properties:
  *               nome:
  *                 type: string
@@ -101,6 +112,7 @@ const router = Router();
  *       404:
  *         description: Usuário não encontrado
  */
+router.put('/:id', updateUser);
 
 /**
  * @swagger
@@ -120,11 +132,6 @@ const router = Router();
  *       404:
  *         description: Usuário não encontrado
  */
-
-router.post('/', createUser);
-router.get('/', getUsers);
-router.get('/:id', getUser);
-router.put('/:id', updateUser);
 router.delete('/:id', deleteUser);
 
 export default router;

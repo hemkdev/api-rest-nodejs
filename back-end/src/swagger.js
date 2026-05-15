@@ -8,6 +8,7 @@ const options = {
       version: '1.0.0',
       description: 'Documentação da API de usuários',
     },
+    servers: [{ url: process.env.API_BASE_URL || 'http://localhost:3000' }],
   },
   apis: ['./src/routes/*.js'],
 };
